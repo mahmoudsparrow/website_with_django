@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Sparrow</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'accounts/css/animate.min.css' %}">
+		<link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %}">
+		<link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
+		<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}">
+		<link rel="shortcut icon" href="{% static 'accounts/img/ico.ico' %}">
+</head>
+<body data-spy="scroll" data-target=".navbar-collapse">
+	<div class="preloader">
+		<div class="sk-spinner sk-spinner-rotating-plane"></div>
+	</div>
+    
+        <section id="profile"><!-- Start Section Profile-->
+            <div class="container">
+                <div class="row">
+					<!--<?php
+					if(isset($_GET['id'])){
+						$id = $_GET['id'];
+					}else{
+						$id = $ID;
+					}
+	
+					$info = $user->getUserInfo($id);
+					$user_rows = $info->num_rows;
+					if($user_rows == 1)
+					{
+						$userInfo = $info->fetch_assoc();
+						$username = $userInfo['fullname'];
+						$email = $userInfo['email'];
+						$password = $userInfo['password'];
+						$profilePic = $userInfo['ProfilePic'];
+						$phone = $userInfo['phone'];
+						$address = $userInfo['address'];
+					}
+					else header("Location: index.php");
+					?>-->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 id-wrapper">
+                        
+                            <img src="{{ user.userprofile.image.url }}" alt="user image">
+                            <a type="button" class="" data-toggle="modal" data-target="#proModal"><div class=profileOverlay>
+                            <i class="fa fa-camera" aria-hidden="true"></i></div></a>
+                            <br>
+                            <p>{{ user.username }}</p>
+														<p>Admin?: {{ user.is_superuser }}</p>
+														<p>{{ user.userprofile.city }}</p>
+														<p>{{ user.email }}</p>
+														<p>{{ user.userprofile.website }}</p>
+														<p>{{ user.userprofile.description }}</p>
+                            <div class="row buttons-wrapper">
+															 {% if user.is_superuser %}
+																		 <button><a href="/admin">Admin panel</a></button>
+																{% else %}
+																			<button><a href="#Courses" class="smoothScroll">Explore Courses </a></button>
+																{% endif %}
+																<!--<h1>RUID {{ request.user.id }}</h1>
+																<h1>UID {{ user.id }}</h1>-->
+																{% if user.id == request.user.id %}
+																		<i class="fa fa-wpexplorer" aria-hidden="true"></i>
+																		<button data-toggle="modal" data-target="#myModal">Edit <i class="fa fa-pencil" aria-hidden="true"></i></button>
+																{% else %}
+																		{% if not user in friends %}
+																				<i class="fa fa-wpexplorer" aria-hidden="true"></i>
+																				<a href="{% url 'accounts:friendship' operation='add' pk=user.pk %}">Add friend</a>
+																		{% else %}
+																				<i class="fa fa-wpexplorer" aria-hidden="true"></i>
+																				<a href="{% url 'accounts:friendship' operation='remove' pk=user.pk %}">Remove friend</a>
+																		{% endif %}
+																{% endif %}
+															<form action="/account/logout/" method="post">
+																{% csrf_token %}
+																<button name="logout_submit">Log Out <i class="fa fa-sign-out" aria-hidden="true"></i></button>
+															</form>
+                            </div>
+                    </div>
+                </div>
+				<div class="row down arrow animated bounce">
+                    <a href="#Courses" class="smoothScroll"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </section><!-- End Section Profile-->
+			<!-- Start Form edit -->
+		<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+		
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				{% load widget_tweaks %}
+			<form method="post" >
+				{% csrf_token %}
+				<div class="form-group">
+				  <label for="exampleInputName">Desc</label>
+				  {% render_field form.description class+="form-control" placeholder="Name" %}
+				</div>
+				<div class="form-group">
+				  <label for="exampleInputPassword1">City</label>
+				  {% render_field form.city class+="form-control" placeholder="City" value=user.userprofile.city %}
+				</div>
+				<div class="form-group">
+				  <label for="exampleInputPassword1">Phone</label>
+				  {% render_field form.phone class+="form-control" placeholder="Phone" value=user.userprofile.phone %}
+				</div>
+				<div class="form-group">
+				  <label for="exampleInputPassword1">website</label>
+				  {% render_field form.website class+="form-control" placeholder="website" value=user.userprofile.website %}
+				</div>
+				<button type="reset" class="btn btn-primary">Reset</button>
+				<button name="submitEditUser" type="submit" class="btn btn-primary">Save</button>
+			</form>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+    <!-- End Form edit -->
+    <!-- Start Form upload -->
+    <div class="modal fade" id="proModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		  <form action="actions/uploadPics.php" method="post" enctype="multipart/form-data">
+				Select photo to upload:
+				<input class="btn btn-sm btn-clear-g" type="file" name="fileToUpload" id="fileToUpload">
+				<br>
+				<button class="btn btn-sm btn-clear-g" type="submit" value="Upload Image" name="submit"><i class="fa fa-camera"></i> Submit photo</button>
+			</form>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- End Form upload -->
+         <section id="Courses"><!-- End courses-->
+						<h3>Suggestion List</h3>
+						{% for user in users %}
+							{% if not user in friends %}
+								<h6><a href="{% url 'accounts:visit_profile' pk=user.pk %}">
+										{{ user.username }}</a><h6>
+							{% endif %}
+						{% endfor %}
+
+						<h3>Friend List</h3>
+						<h4>You have {{ no_of_friends }} friends</h4>
+						{% for friend in friends %}
+										<h5><a href="{% url 'accounts:visit_profile' pk=friend.pk %}">{{ friend.username }}</a></h5>
+										<h6><a href="{% url 'accounts:messages' pk=friend.pk %}">Chat</a></h6>
+						{% endfor %}
+ 
+        </section><!-- End courses -->
+         <section id="contact"><!-- Start Contact-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div id="map"></div>
+                    <div id="ContactContent">
+                            <h1>Contact Us</h1>
+                            <h4>(002)-01110016232</h4>
+                            <h4> Dokii - Cairo, Egypt</h4>
+                            <ul class="social-icon">
+                                <li><a href="#" class="fa fa-facebook"></a></li>
+                                <li><a href="#" class="fa fa-youtube"></a></li>
+                            </ul>
+                        </div>
+                </div>
+            </div>
+        </section><!-- End Contact-->
+    <script src="{% static 'accounts/js/contact.map.js' %}"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMOoldNN8-18bA8I09jatcU_Oi8Lg7vBo&callback=initMap">
+    </script>
+    <script>
+        document.getElementById("uploadBtn").onchange = function () {
+    document.getElementById("uploadFile").value = this.value;
+};
+    </script>
+    
+    <script src="{% static 'accounts/js/jquery.js' %}"></script>
+		<script src="{% static 'accounts/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'accounts/js/smoothscroll.js' %}"></script>
+		<script src="{% static 'accounts/js/wow.min.js' %}"></script>
+		<script src="{% static 'accounts/js/custom.js' %}"></script>
+</body>
+</html>

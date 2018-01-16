@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/css/bootstrap.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'accounts/css/font-awesome.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %} ">
+    <link rel="shortcut icon" href="{% static 'accounts/img/ico.ico' %} ">
+
+{% block head %}
+    <title>SpaRRoW</title>
+{% endblock %}
+
+</head>
+<body>
+    <div id="app">
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="icon icon-bar"></span> <span class="icon icon-bar"></span> <span class="icon icon-bar"></span> </button>
+                    <a href="/" class="navbar-brand">SpaRRoW</a></div>
+
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/" class="smoothScroll">Home</a></li>
+                        <li><a href="/#about" class="smoothScroll">About Us</a></li>
+                        <li><a href="/#Services" class="smoothScroll">Our Team</a></li>
+                        <li><a href="/#contact" class="smoothScroll">Contact Us</a></li>
+                        <li><a href="/QAs.php" class="smoothScroll">Q&A</a></li>
+                        <li><a href="jobs.php" class="smoothScroll">Jobs</a></li>
+                        
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'accounts:profile' %}" class="smoothScroll">Profile</a></li>
+                        <li><a href="{% url 'accounts:logout' %}" class="smoothScroll">logout <i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                        {% else %}
+                        <li><a href="{% url 'accounts:register' %}" class="smoothScroll">Sign Up</a></li>
+                        <li><a href="{% url 'accounts:login' %}"type="button" class="" data-toggle="modal" data-target="#myModal">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+<br>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'accounts/js/chat.js' %}"></script>
+</body>
+</html>

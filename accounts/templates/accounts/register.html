@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Register</h1>
+    {% load widget_tweaks %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.username class+="form-control" placeholder="Name" %}
+        </div>
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.first_name class+="form-control" placeholder="FN" %}
+        </div>
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.last_name class+="form-control" placeholder="LN" %}
+        </div>
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.email class+="form-control" placeholder="email" %}
+        </div>
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.password1 class+="form-control" placeholder="password" %}
+        </div>
+        <div class="col-lg-6 col-md-6">
+            {% render_field form.password2 class+="form-control" placeholder="password1" %}
+        </div>
+        <button class="btn btn-success" type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

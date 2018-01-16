@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Messages here</h1>
+    {{ chat }}
+    {% for msg in chat %}
+        {{ msg.user }}
+    {% endfor %}
+    <h3>{{ msg }}</h3>
+    <h3>{{ pk }}</h3>
+    <h3>{{ user }}</h3>
+
+    <div id="chat-body" class="panel panel-default">
+        <div id="msg-list-div" class="panel-body">
+            <ul id="msg-list" class="list-group">
+                {% for conversation in chat %}
+                    {% if conversation.user == request.user %}
+                        <li class="text-left list-group-item">{{ conversation.message }}</li>
+                    {% else %}
+                        <li class="text-right list-group-item">{{ conversation.message }}</li>
+                    {% endif %}    
+                {% empty %}
+                        <li class="text-center list-group-item">say hi to {{ pk }}</li>
+                {% endfor %}
+                <script>
+                    var chatlist = document.getElementById('msg-list-div');
+                    chatlist.scrollTop = chatlist.scrollHeight;
+                </script>
+            </ul>
+        </div>
+    </div>
+
+
+    <form id="chat-form" method="POST" action="{% url 'accounts:messages' pk=pk %}">
+        <div id="chat-button" class="input-group">
+            {% csrf_token %}
+            <input type="text" id="chat-msg" name="chat-msg" class="form-control"/>
+            <span class="input-group-btn">
+                <input class="btn btn-default" type="submit" id="send" value="Send"/>
+            </span>
+        </div>
+    </form>
+</div>
+
+{% load static %}
+<script src="{% static 'accounts/js/chat.js' %}"></script>
+{% endblock %}
